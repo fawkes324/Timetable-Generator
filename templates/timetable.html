@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Timetable</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #ffccbc);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #34495e;
+            margin: 10px 0;
+        }
+        h2 {
+            font-size: 2rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            color: #2980b9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        ul li {
+            background-color: #ffffff;
+            border-radius: 12px;
+            margin: 10px 0;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        th {
+            background-color: #2980b9;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover td {
+            background-color: #d5e8f6;
+        }
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #3498db;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 10px auto;
+        }
+        .button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        .card {
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generated Timetable</h1>
+        <h2>Score: {{ score }}</h2>
+        <h3>Number of Conflicts: {{ conflicts|length }}</h3>
+        
+        <div class="card">
+            <h3>Conflicts:</h3>
+            <ul>
+                {% for conflict in conflicts %}
+                    <li>Section: {{ conflict[0] }}, Day: {{ conflict[1][0] }}, Period: {{ conflict[1][1] }} - Subject: {{ conflict[2][0] }}, Teacher: {{ conflict[2][1] }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Timetable:</h3>
+            <table>
+                <tr>
+                    <th>Section</th>
+                    <th>Day</th>
+                    <th>Period</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                </tr>
+                {% for section, schedule in timetable.items() %}
+                    {% for (day, period), (subject, teacher) in schedule.items() %}
+                        <tr>
+                            <td>{{ section }}</td>
+                            <td>{{ day }}</td>
+                            <td>{{ period }}</td>
+                            <td>{{ subject }}</td>
+                            <td>{{ teacher }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+
+        <a class="button" href="{{ url_for('download_file', filename='timetable.csv') }}">Download Timetable</a>
+        <a class="button" href="/">Generate Another Timetable</a>
+    </div>
+</body>
+</html>
